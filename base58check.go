@@ -5,8 +5,9 @@
 package base58
 
 import (
-	"crypto/sha256"
 	"errors"
+
+	"golang.org/x/crypto/ripemd160"
 )
 
 // ErrChecksum indicates that the checksum of a check-encoded string does not verify against
@@ -18,16 +19,16 @@ var ErrInvalidFormat = errors.New("invalid format: version and/or checksum bytes
 
 // checksum: first four bytes of sha256^2
 func checksum(input []byte) (cksum [4]byte) {
-	h := sha256.Sum256(input)
-	h2 := sha256.Sum256(h[:])
-	copy(cksum[:], h2[:4])
+	ripe := ripemd160.New()
+	ripe.Write(input)
+	h := ripe.Sum(nil)
+	copy(cksum[:], h[:4])
 	return
 }
 
 // CheckEncode prepends a version byte and appends a four byte checksum.
-func CheckEncode(input []byte, version byte) string {
-	b := make([]byte, 0, 1+len(input)+4)
-	b = append(b, version)
+func CheckEncode(input []byte) string {
+	b := make([]byte, 0, len(input)+4)
 	b = append(b, input[:]...)
 	cksum := checksum(b)
 	b = append(b, cksum[:]...)
@@ -35,18 +36,17 @@ func CheckEncode(input []byte, version byte) string {
 }
 
 // CheckDecode decodes a string that was encoded with CheckEncode and verifies the checksum.
-func CheckDecode(input string) (result []byte, version byte, err error) {
+func CheckDecode(input string) (result []byte, err error) {
 	decoded := Decode(input)
-	if len(decoded) < 5 {
-		return nil, 0, ErrInvalidFormat
+	if len(decoded) < 4 {
+		return nil, ErrInvalidFormat
 	}
-	version = decoded[0]
 	var cksum [4]byte
 	copy(cksum[:], decoded[len(decoded)-4:])
 	if checksum(decoded[:len(decoded)-4]) != cksum {
-		return nil, 0, ErrChecksum
+		return nil, ErrChecksum
 	}
-	payload := decoded[1 : len(decoded)-4]
+	payload := decoded[:len(decoded)-4]
 	result = append(result, payload...)
 	return
 }

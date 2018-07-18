@@ -1,7 +1,6 @@
-base58
+base58 encoding/decoding for EOS
 ==========
 
-[![Build Status](http://img.shields.io/travis/btcsuite/btcutil.svg)](https://travis-ci.org/btcsuite/btcutil)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/btcsuite/btcutil/base58)
 
@@ -14,7 +13,7 @@ A comprehensive suite of tests is provided to ensure proper functionality.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/btcsuite/btcutil/base58
+$ go get -u github.com/Jeiwan/eos-b58
 ```
 
 ## Examples
