@@ -4,11 +4,7 @@ base58 encoding/decoding for EOS
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/btcsuite/btcutil/base58)
 
-Package base58 provides an API for encoding and decoding to and from the
-modified base58 encoding.  It also provides an API to do Base58Check encoding,
-as described [here](https://en.bitcoin.it/wiki/Base58Check_encoding).
-
-A comprehensive suite of tests is provided to ensure proper functionality.
+This package is fork of https://github.com/btcsuite/btcutil/tree/master/base58 which is adapted to the Base58 algorithm used by EOS (https://github.com/EOSIO/eos).
 
 ## Installation and Updating
 
@@ -18,13 +14,13 @@ $ go get -u github.com/Jeiwan/eos-b58
 
 ## Examples
 
-* [Decode Example](http://godoc.org/github.com/btcsuite/btcutil/base58#example-Decode)  
+* [Decode Example](https://github.com/Jeiwan/eos-b58/blob/master/example_test.go#L13)  
   Demonstrates how to decode modified base58 encoded data.
-* [Encode Example](http://godoc.org/github.com/btcsuite/btcutil/base58#example-Encode)  
+* [Encode Example](https://github.com/Jeiwan/eos-b58/blob/master/example_test.go#L26)  
   Demonstrates how to encode data using the modified base58 encoding scheme.
-* [CheckDecode Example](http://godoc.org/github.com/btcsuite/btcutil/base58#example-CheckDecode)  
+* [CheckDecode Example](https://github.com/Jeiwan/eos-b58/blob/master/example_test.go#L26)  
   Demonstrates how to decode Base58Check encoded data.
-* [CheckEncode Example](http://godoc.org/github.com/btcsuite/btcutil/base58#example-CheckEncode)  
+* [CheckEncode Example](https://github.com/Jeiwan/eos-b58/blob/master/example_test.go#L57)  
   Demonstrates how to encode data using the Base58Check encoding scheme.
 
 ## License
