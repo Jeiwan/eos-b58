@@ -5,6 +5,7 @@
 package base58
 
 import (
+	"bytes"
 	"errors"
 
 	"golang.org/x/crypto/ripemd160"
@@ -16,6 +17,8 @@ var ErrChecksum = errors.New("checksum error")
 
 // ErrInvalidFormat indicates that the check-encoded string has an invalid format.
 var ErrInvalidFormat = errors.New("invalid format: version and/or checksum bytes missing")
+
+var ErrUnsupportedType = errors.New("only K1 type is supported")
 
 // checksum: first four bytes of sha256^2
 func checksum(input []byte) (cksum [4]byte) {
@@ -48,5 +51,29 @@ func CheckDecode(input string) (result []byte, err error) {
 	}
 	payload := decoded[:len(decoded)-4]
 	result = append(result, payload...)
+	return
+}
+
+// CheckDecodeWithType decodes a string that was encoded with CheckEncode and verifies the checksum.
+func CheckDecodeWithType(input, typ string) (result []byte, err error) {
+	if typ != "K1" {
+		return nil, ErrUnsupportedType
+	}
+
+	decoded := Decode(input)
+	proofChecksum := decoded[len(decoded)-4:]
+	data := decoded[:len(decoded)-4]
+
+	checkData := [][]byte{data}
+	checkData = append(checkData, []byte(typ))
+
+	actualChecksum := checksum(bytes.Join(checkData, []byte{}))
+	if bytes.Compare(actualChecksum[:], proofChecksum) != 0 {
+		return nil, ErrChecksum
+	}
+
+	payload := decoded[:len(decoded)-4]
+	result = append(result, payload...)
+
 	return
 }
